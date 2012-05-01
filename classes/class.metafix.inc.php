@@ -34,7 +34,7 @@ class metafix
    * @return void
    * @author
    **/
-  function get_fields($source=null)
+  private function get_fields($source=null)
   {
     $metas = array();
     $db = new rex_sql;
@@ -82,7 +82,7 @@ class metafix
    * @return void
    * @author
    **/
-  function get_missmatched($type=null)
+  private function get_missmatched($type=null)
   {
     $missmatched = array();
     foreach ($this->types as $prefix => $table)
