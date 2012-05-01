@@ -1,121 +1,108 @@
 <?php
 
+/**
+ * undocumented class
+ *
+ * @package default
+ * @author
+ **/
+class metafix
+{
+  public $missing_fields;
+  public $orphaned_fields;
+  public $table_metas;
+  public $metainfo_metas;
+  private $types;
+
+
+  function __construct()
+  {
+    $this->types = array(
+      'art_' =>'rex_article',
+      'cat_' =>'rex_article',
+      'med_' =>'rex_file'
+      );
+    $this->table_metas     = self::get_fields('tables');
+    $this->metainfo_metas  = self::get_fields('metainfo');
+    $this->missing_fields  = self::get_missmatched('missing');
+    $this->orphaned_fields = self::get_missmatched('orphaned');
+  }
+
   /**
-   * undocumented class
+   * undocumented function
    *
-   * @package default
+   * @return void
    * @author
    **/
-  class metafix
+  function get_fields($source=null)
   {
-    public $missing_fields;
-    public $orphaned_fields;
-    public $table_metas;
-    public $metainfo_metas;
-    private $types;
+    $metas = array();
+    $db = new rex_sql;
 
-    function __construct()
+    switch($source)
     {
-      $this->types = array(
-        'art_' =>'rex_article',
-        'cat_' =>'rex_article',
-        'med_' =>'rex_file'
-        );
-      $this->table_metas     = self::get_table_metas();
-      $this->metainfo_metas  = self::get_metainfo_metas();
-      $this->missing_fields  = self::get_missing_fields();
-      $this->orphaned_fields = self::get_orphaned_fields();
-    }
-
-      /**
-       * undocumented function
-       *
-       * @return void
-       * @author
-       **/
-      function get_table_metas()
-      {
-        $metas = array();
-        $db = new rex_sql;
-
+      case 'tables':
         foreach ($this->types as $prefix => $table)
         {
-         foreach($db->getDbArray('SHOW COLUMNS FROM `'.$table.'` LIKE \''.str_replace('_','\_',$prefix).'%\';') as $column)
-         {
-           $metas[$prefix][] = $column['Field'];
-         }
-       }
-
-       foreach ($this->types as $prefix => $table)
-       {
-        $metas[$prefix] = !isset($metas[$prefix]) ? array() : $metas[$prefix];
-        sort($metas[$prefix]);
-      }
-      ksort($metas);
-
-      return $metas;
-    }
-
-
-      /**
-       * undocumented function
-       *
-       * @return void
-       * @author
-       **/
-      function get_metainfo_metas()
-      {
-        $metas = array();
-        $db = new rex_sql;
-
-        foreach ($this->types as $prefix => $table)
-        {
-         foreach($db->getDbArray('SELECT `name` FROM `rex_62_params` WHERE `name` LIKE \''.str_replace('_','\_',$prefix).'%\';') as $column)
-         {
-           $metas[$prefix][] = $column['name'];
-         }
-       }
-
-       foreach ($this->types as $prefix => $table)
-       {
-        $metas[$prefix] = !isset($metas[$prefix]) ? array() : $metas[$prefix];
-        sort($metas[$prefix]);
-      }
-      ksort($metas);
-
-      return $metas;
-    }
-
-      /**
-       * undocumented function
-       *
-       * @return void
-       * @author
-       **/
-      function get_missing_fields()
-      {
-        $missing = array();
-        foreach ($this->types as $prefix => $table)
-        {
-          $missing[$prefix] = array_diff($this->metainfo_metas[$prefix],$this->table_metas[$prefix]);
+          foreach($db->getDbArray('SHOW COLUMNS FROM `'.$table.'` LIKE \''.str_replace('_','\_',$prefix).'%\';') as $column)
+          {
+            $metas[$prefix][] = $column['Field'];
+          }
         }
-        return $missing;
-      }
+        break;
 
-      /**
-       * undocumented function
-       *
-       * @return void
-       * @author
-       **/
-      function get_orphaned_fields()
-      {
-        $orphaned = array();
+      case 'metainfo':
         foreach ($this->types as $prefix => $table)
         {
-          $orphaned[$prefix] = array_diff($this->table_metas[$prefix],$this->metainfo_metas[$prefix]);
+          foreach($db->getDbArray('SELECT `name` FROM `rex_62_params` WHERE `name` LIKE \''.str_replace('_','\_',$prefix).'%\';') as $column)
+          {
+            $metas[$prefix][] = $column['name'];
+          }
         }
-        return $orphaned;
-      }
+        break;
 
-  } // END class metafix
+      default:
+        return false;
+        break;
+    }
+
+    foreach ($this->types as $prefix => $table)
+    {
+      $metas[$prefix] = !isset($metas[$prefix]) ? array() : $metas[$prefix];
+      sort($metas[$prefix]);
+    }
+    ksort($metas);
+
+    return $metas;
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author
+   **/
+  function get_missmatched($type=null)
+  {
+    $missmatched = array();
+    foreach ($this->types as $prefix => $table)
+    {
+      switch ($type)
+      {
+        case 'missing':
+          $missmatched[$prefix] = array_diff($this->metainfo_metas[$prefix],$this->table_metas[$prefix]);
+          break;
+
+        case 'orphaned':
+          $missmatched[$prefix] = array_diff($this->table_metas[$prefix],$this->metainfo_metas[$prefix]);
+          break;
+
+        default:
+          return false;
+          break;
+      }
+    }
+    return $missmatched;
+  }
+
+} // END class metafix
