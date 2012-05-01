@@ -12,7 +12,7 @@ class metafix
   public $orphaned_fields;
   public $table_metas;
   public $metainfo_metas;
-  private $types;
+  public $types;
 
 
   function __construct()
@@ -103,6 +103,30 @@ class metafix
       }
     }
     return $missmatched;
+  }
+
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author
+   **/
+  public function insert_field($prefix=null,$name=null)
+  {
+    if(!$prefix && !$name)
+      return false;
+
+    if(in_array($name,$this->missing_fields[$prefix]))
+    {
+      $db = new rex_sql;
+      if($db->setQuery('ALTER TABLE `'.$this->types[$prefix].'` ADD `'.$name.'` TEXT NOT NULL;'))
+      {
+        echo rex_info('Metainfo Field '.$name.' re-inserted.');
+        return true;
+      }
+    }
+
+    return false;
   }
 
 } // END class metafix

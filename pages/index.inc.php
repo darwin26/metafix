@@ -25,7 +25,17 @@ require $REX['INCLUDE_PATH'] . '/layout/top.php';
 
 rex_title('Metafix',$REX['ADDON']['metainfo']['SUBPAGES']);
 
-$MF = new metafix; fb($MF);
+$MF = new metafix;
+
+// REINSERT
+////////////////////////////////////////////////////////////////////////////////
+if($func=='insert')
+{
+  if($MF->insert_field(rex_request('prefix', 'string'),rex_request('name', 'string'))===true)
+  {
+    $MF = new metafix;
+  }
+}
 
 echo '
 <div class="rex-addon-output">
