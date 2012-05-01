@@ -5,7 +5,7 @@
  * @author http://rexdev.de
  *
  * @package redaxo4.3
- * @version svn:$Id: index.inc.php 27 2012-03-19 19:33:17Z jeffe $:
+ * @version 0.1.0
  */
 
 // GET PARAMS
