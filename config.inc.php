@@ -11,13 +11,16 @@
 $myself = 'metafix';
 $myroot = $REX['INCLUDE_PATH'].'/addons/metainfo/plugins/'.$myself;
 
+
 // MAIN
+////////////////////////////////////////////////////////////////////////////////
 rex_register_extension('ADDONS_INCLUDED', 'metafix_init');
 function metafix_init($params)
 {
   global $REX;
 
   // SNEAK INTO METAINFO SUBPAGES
+  //////////////////////////////////////////////////////////////////////////////
   $REX['ADDON']['pages']['metainfo'][] = array ('metafix' , 'Metafix');
   $REX['ADDON']['metainfo']['SUBPAGES'] = $REX['ADDON']['pages']['metainfo'];
   unset($REX['ADDON']['pages']['metainfo']);
@@ -27,6 +30,7 @@ function metafix_init($params)
   }
 
   // INJECT REASIGN JS
+  //////////////////////////////////////////////////////////////////////////////
   $page    = rex_request('page'   , 'string');
   $func    = rex_request('func'   , 'string');
   $reasign = rex_request('reasign', 'string','none');

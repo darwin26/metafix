@@ -12,15 +12,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 $myself             = 'metafix';
 $myroot             = $REX['INCLUDE_PATH'].'/addons/metainfo/plugins/'.$myself.'/';
-$modul_root         = $myroot.'modules/';
 $subpage            = rex_request('subpage', 'string');
 $func               = rex_request('func', 'string');
+
+// INCLUDES
+////////////////////////////////////////////////////////////////////////////////
+require_once $myroot.'/classes/class.metafix.inc.php';
 
 // OUTPUT
 ////////////////////////////////////////////////////////////////////////////////
 require $REX['INCLUDE_PATH'] . '/layout/top.php';
 
 rex_title('Metafix',$REX['ADDON']['metainfo']['SUBPAGES']);
+
+$MF = new metafix; fb($MF);
 
 echo '
 <div class="rex-addon-output">
