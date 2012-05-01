@@ -29,11 +29,24 @@ $MF = new metafix; fb($MF);
 
 echo '
 <div class="rex-addon-output">
-  <h2 class="rex-hl2" style="font-size: 1em;">Missing fields</h2>
+  <h2 class="rex-hl2">Missing Fields <span style="color:gray;font-size:0.7em;">(registered in Metainfo, missing in table)</span></h2>
 
   <div class="rex-addon-content">
     <div class="markitup">
-      <h1>Standard Modul</h1>
+';
+
+$textile = '';
+foreach ($MF->missing_fields as $prefix => $fields)
+{
+  $textile .= PHP_EOL.'h2. '.$prefix.PHP_EOL.PHP_EOL;
+  foreach ($fields as $key => $name)
+  {
+    $textile .= '* '.$name.' [ "re-insert":index.php?page=metainfo&subpage=metafix&func=insert&prefix='.$prefix.'&name='.$name.' ]'.PHP_EOL;
+  }
+}
+echo rex_a79_textile($textile);
+
+echo '
     </div><!-- /.markitup -->
   </div><!-- /.rex-addon-content -->
 
@@ -41,11 +54,28 @@ echo '
 
 echo '
 <div class="rex-addon-output">
-  <h2 class="rex-hl2" style="font-size: 1em;">Orphaned fields</h2>
+  <h2 class="rex-hl2">Orphaned Fields <span style="color:gray;font-size:0.7em;">(present in table, unknown to Metainfo)</span></h2>
 
   <div class="rex-addon-content">
     <div class="markitup">
-      <h1>Standard Modul</h1>
+';
+
+$textile = '';
+foreach ($MF->orphaned_fields as $prefix => $fields)
+{
+  $subpage = '';
+  $subpage = $prefix=='cat_' ? 'categories' : $subpage;
+  $subpage = $prefix=='med_' ? 'media' : $subpage;
+
+  $textile .= PHP_EOL.'h2. '.$prefix.PHP_EOL.PHP_EOL;
+  foreach ($fields as $key => $name)
+  {
+    $textile .= '* '.$name.' [ "re-assign":index.php?page=metainfo&subpage='.$subpage.'&func=add&reasign='.$name.' ]'.PHP_EOL;
+  }
+}
+echo rex_a79_textile($textile); // index.php?page=metainfo&subpage=&func=add
+
+echo '
     </div><!-- /.markitup -->
   </div><!-- /.rex-addon-content -->
 
