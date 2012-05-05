@@ -9,10 +9,7 @@
  */
 
 /**
- * undocumented class
- *
- * @package default
- * @author
+ * Handle mismatched Metainfo fields
  **/
 class metafix
 {
@@ -37,15 +34,15 @@ class metafix
     $this->metainfo_ids    = self::get_metainfo_ids();
     $this->table_fields    = self::get_fields('tables');
     $this->metainfo_fields = self::get_fields('metainfo');
-    $this->missing_fields  = self::get_missmatched('missing');
-    $this->orphaned_fields = self::get_missmatched('orphaned');
+    $this->missing_fields  = self::get_mismatched('missing');
+    $this->orphaned_fields = self::get_mismatched('orphaned');
   }
 
   /**
-   * undocumented function
+   * Get fields registered in Metainfo or present in tables
    *
-   * @return void
-   * @author
+   * @param string [$source] (tables|metainfo)
+   * @return array containing all fields in $source
    **/
   private function get_fields($source=null)
   {
@@ -91,10 +88,9 @@ class metafix
   }
 
   /**
-   * undocumented function
+   * Return all Metainfo fields with their DB id
    *
-   * @return void
-   * @author
+   * @return array (name=>field_id,...)
    **/
   function get_metainfo_ids()
   {
@@ -109,12 +105,12 @@ class metafix
   }
 
   /**
-   * undocumented function
+   * Get mismatched Metainfo fields
    *
-   * @return void
-   * @author
+   * @param string [$type] (missing|orphaned)
+   * @return array containing mismatched fields sorted by prefix
    **/
-  private function get_missmatched($type=null)
+  private function get_mismatched($type=null)
   {
     $missmatched = array();
     foreach ($this->types as $prefix => $table)
@@ -138,10 +134,11 @@ class metafix
   }
 
   /**
-   * undocumented function
+   * Insert missing fields into their tables
    *
-   * @return void
-   * @author
+   * @param string [$prefix] (art_|cat_|med_)
+   * @param string [$name] field name
+   * @return bool
    **/
   public function insert_field($prefix=null,$name=null)
   {
@@ -162,10 +159,13 @@ class metafix
   }
 
   /**
-   * undocumented function
+   * Delete mismatched field from table or Metainfo
    *
-   * @return void
-   * @author
+   * @param string [$prefix] (art_|cat_|med_)
+   * @param string [$name] field name
+   * @param int [$field_id] field id in metainfo
+   * @param string [$type] (missing|orphaned)
+   * @return bool
    **/
   public function delete_field($prefix=null,$name=null,$field_id=null,$type=null)
   {
@@ -208,10 +208,11 @@ class metafix
   }
 
   /**
-   * undocumented function
+   * Inser field into Metainfo with generic params
    *
-   * @return void
-   * @author
+   * @param string [$prefix] (art_|cat_|med_)
+   * @param string [$name] field name
+   * @return mixed (false|last insert id)
    **/
   function reasign_field($prefix=null,$name=null)
   {
