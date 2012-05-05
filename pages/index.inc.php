@@ -120,7 +120,7 @@ foreach ($MF->orphaned_fields as $prefix => $fields)
                 '|'.$MF->types[$prefix].
                 '|*'.$name.'*
                  |"re-assign":index.php?page=metainfo&subpage=metafix&func=reasign&prefix='.$prefix.'&name='.$name.
-                '|"(delete)delete":index.php?page=metainfo&subpage=metafix&func=delete&type=orphan&prefix='.$prefix.'&name='.$name.
+                '|"(delete)delete":index.php?page=metainfo&subpage=metafix&func=delete&type=orphaned&prefix='.$prefix.'&name='.$name.
                 '|'.PHP_EOL;
   }
 }

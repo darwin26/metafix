@@ -189,7 +189,7 @@ class metafix
         }
         break;
 
-      case 'orphan':
+      case 'orphaned':
         if(in_array($name,$this->orphaned_fields[$prefix]))
         {
           if($db->setQuery('ALTER TABLE `'.$this->types[$prefix].'` DROP `'.$name.'`;'))
