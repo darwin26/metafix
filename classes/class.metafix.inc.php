@@ -34,7 +34,7 @@ class metafix
       'med_' =>$REX['TABLE_PREFIX'].'file'
       );
 
-    $this->metainfo_ids    = self::get_metinfo_ids();
+    $this->metainfo_ids    = self::get_metainfo_ids();
     $this->table_fields    = self::get_fields('tables');
     $this->metainfo_fields = self::get_fields('metainfo');
     $this->missing_fields  = self::get_missmatched('missing');
@@ -96,7 +96,7 @@ class metafix
    * @return void
    * @author
    **/
-  function get_metinfo_ids()
+  function get_metainfo_ids()
   {
     global $REX;
     $metas = array();
