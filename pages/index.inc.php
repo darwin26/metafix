@@ -127,19 +127,18 @@ foreach ($MF->orphaned_fields as $prefix => $fields)
 
 $textile .= '
  </div><!-- /.rex-addon-output -->
+
+notextile. <script>
+  jQuery("a.delete").click(function(){
+      if(confirm("sure?")){
+        return true;
+      } else {
+        return false;
+      }
+  });
+</script>
 ';
 
 echo rex_a79_textile($textile);
 
 require $REX['INCLUDE_PATH'] . '/layout/bottom.php';
-
-echo '<script>
-jQuery("a.delete").click(function(){
-    if(confirm("sure?")){
-      return true;
-    } else {
-      return false;
-    }
-});
-</script>
-';
