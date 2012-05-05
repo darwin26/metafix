@@ -12,10 +12,14 @@ ini_set('display_errors', 0);
 
 // GET PARAMS
 ////////////////////////////////////////////////////////////////////////////////
-$myself             = 'metafix';
-$myroot             = $REX['INCLUDE_PATH'].'/addons/metainfo/plugins/'.$myself.'/';
-$subpage            = rex_request('subpage', 'string');
-$func               = rex_request('func', 'string');
+$myself   = 'metafix';
+$myroot   = $REX['INCLUDE_PATH'].'/addons/metainfo/plugins/'.$myself.'/';
+$subpage  = rex_request('subpage', 'string');
+$func     = rex_request('func', 'string');
+$prefix   = rex_request('prefix', 'string');
+$name     = rex_request('name', 'string');
+$field_id = rex_request('field_id', 'int');
+$type     = rex_request('type', 'string');
 
 
 // INCLUDES
@@ -45,7 +49,7 @@ rex_title('Metafix',$REX['ADDON']['metainfo']['SUBPAGES']);
 ////////////////////////////////////////////////////////////////////////////////
 if($func=='insert')
 {
-  if($MF->insert_field(rex_request('prefix', 'string'),rex_request('name', 'string'))===true)
+  if($MF->insert_field($prefix,$name)===true)
   {
     $MF = new metafix;
   }
@@ -53,9 +57,18 @@ if($func=='insert')
 
 if($func=='delete')
 {
-  if($MF->delete_field(rex_request('prefix', 'string'),rex_request('name', 'string'),rex_request('field_id', 'int'),rex_request('type', 'string'))===true)
+  if($MF->delete_field($prefix,$name,$field_id,$type)===true)
   {
     $MF = new metafix;
+  }
+}
+
+if($func=='reasign')
+{
+  $last_insert_id = $MF->reasign_field($prefix,$name);
+  if($last_insert_id > 0 && $last_insert_id !== false)
+  {
+    header('Location: index.php?page=metainfo&subpage='.$prefix_to_subpage[$prefix].'&func=edit&field_id='.$last_insert_id.'&reasign='.str_replace($prefix,'',$name));
   }
 }
 
@@ -68,7 +81,7 @@ $textile = '
 h2(rex-hl2). Missing Fields %{color:gray;font-size:0.7em}(registered in Metainfo, missing in table)%
 
 table(rex-table).
-|_{width:30px;}. id|_{width:80px;}. table|_{width:auto;}. name|_{width:50px;}. fix |_{width:50px;}. delete |
+|_{width:30px;}. id|_{width:100px;}. missing in table|_{width:auto;}. name|_{width:50px;}. fix |_{width:50px;}. delete |
 ';
 
 foreach ($MF->missing_fields as $prefix => $fields)
@@ -94,7 +107,7 @@ $textile .= '
 h2(rex-hl2). Orphaned Fields %{color:gray;font-size:0.7em;}(present in table, unknown to Metainfo)%
 
 table(rex-table).
-|_{width:30px;}. id|_{width:80px;}. table|_{width:auto;}. name|_{width:50px;}. fix |_{width:50px;}. delete |
+|_{width:30px;}. id|_{width:100px;}. found in table|_{width:auto;}. name|_{width:50px;}. fix |_{width:50px;}. delete |
 ';
 
 foreach ($MF->orphaned_fields as $prefix => $fields)
@@ -106,7 +119,7 @@ foreach ($MF->orphaned_fields as $prefix => $fields)
     $textile .= '| - '.
                 '|'.$MF->types[$prefix].
                 '|*'.$name.'*
-                 |"re-assign":index.php?page=metainfo&subpage='.$subpage.'&func=add&reasign='.$name.
+                 |"re-assign":index.php?page=metainfo&subpage=metafix&func=reasign&prefix='.$prefix.'&name='.$name.
                 '|"(delete)delete":index.php?page=metainfo&subpage=metafix&func=delete&type=orphan&prefix='.$prefix.'&name='.$name.
                 '|'.PHP_EOL;
   }

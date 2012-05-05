@@ -207,4 +207,27 @@ class metafix
     return false;
   }
 
+  /**
+   * undocumented function
+   *
+   * @return void
+   * @author
+   **/
+  function reasign_field($prefix=null,$name=null)
+  {
+    if(!$prefix || !$name) {
+      return false;
+    }
+
+    if(in_array($name,$this->orphaned_fields[$prefix]))
+    {
+      global $REX;
+      $db = new rex_sql;
+      $db->setQuery('INSERT INTO `'.$REX['TABLE_PREFIX'].'62_params` VALUES(\'\', \'\', \''.$name.'\', 1, \'\', 1, \'\', \'\', NULL, \'\', \'metafix\', \'\', \'metafix\', \'\');');
+      return $db->getLastId();
+    }
+
+    return false;
+  }
+
 } // END class metafix

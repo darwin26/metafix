@@ -34,7 +34,7 @@ function metafix_init($params)
   $page    = rex_request('page'   , 'string');
   $func    = rex_request('func'   , 'string');
   $reasign = rex_request('reasign', 'string','none');
-  if($page==='metainfo' && $func==='add' && $reasign!=='none')
+  if($page==='metainfo' && $func==='edit' && $reasign!=='none')
   {
     rex_register_extension('OUTPUT_FILTER','metafix_opf');
     function metafix_opf($params)
