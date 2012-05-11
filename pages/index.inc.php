@@ -5,7 +5,7 @@
  * @author http://rexdev.de
  *
  * @package redaxo4.3
- * @version 0.3.0
+ * @version 0.3.1
  */
 
 ini_set('display_errors', 0);
