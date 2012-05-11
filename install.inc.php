@@ -10,10 +10,18 @@
 
 $myself = 'metafix';
 
-
-// CHECKS
+// CHECK INSTALL AS PLUGIN
 ////////////////////////////////////////////////////////////////////////////////
-if(!OOAddon::isActivated('textile'))
+if(!isset($ADDONSsic) || !isset($ADDONSsic['plugins']['metainfo']['install']['metafix']))
+{
+  $REX['ADDON']['installmsg'][$myself] .= 'Metafix is not an Addon - it\'s a Metainfo Plugin!';
+  $REX['ADDON']['install'][$myself] = 0;
+  return;
+}
+
+// REQUIRE TEXTILE
+////////////////////////////////////////////////////////////////////////////////
+if(!isset($ADDONSsic['version']['textile']))
 {
   $REX['ADDON']['installmsg'][$myself] = 'Textile Addon required!';
   $REX['ADDON']['install'][$myself] = 0;
