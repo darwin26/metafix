@@ -8,3 +8,5 @@ requires:
   addons:
     metainfo:
       min-version: '5.0 a1'
+    textile:
+      min-version: '5.0 a1'
