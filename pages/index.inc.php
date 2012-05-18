@@ -64,9 +64,9 @@ if($func=='reasign')
 // PAGE BODY
 ////////////////////////////////////////////////////////////////////////////////
 $textile = '
- <div class="rex-addon-output">
+ <section class="rex-content rex-content-block">
 
-h2(rex-hl2). Missing Fields %{color:gray;font-size:0.7em}(registered in Metainfo, missing in table)%
+h2(rex-hl2). Missing Fields %{color:silver;font-size:0.7em}(registered in Metainfo, missing in table)%
 
 table(rex-table).
 |_{width:30px;}. id|_{width:100px;}. missing in table|_{width:auto;}. name|_{width:50px;}. fix |_{width:50px;}. delete |
@@ -88,11 +88,11 @@ foreach ($MF->missing_fields as $prefix => $fields)
 }
 
 $textile .= '
- </div><!-- /.rex-addon-output -->
+ </section><!-- /.rex-content.rex-content-block -->
 
- <div class="rex-addon-output">
+ <section class="rex-content rex-content-block">
 
-h2(rex-hl2). Orphaned Fields %{color:gray;font-size:0.7em;}(present in table, unknown to Metainfo)%
+h2(rex-hl2). Orphaned Fields %{color:silver;font-size:0.7em;}(found in table, unknown to Metainfo)%
 
 table(rex-table).
 |_{width:30px;}. id|_{width:100px;}. found in table|_{width:auto;}. name|_{width:50px;}. fix |_{width:50px;}. delete |
@@ -114,7 +114,7 @@ foreach ($MF->orphaned_fields as $prefix => $fields)
 }
 
 $textile .= '
- </div><!-- /.rex-addon-output -->
+ </section><!-- /.rex-content.rex-content-block -->
 
 notextile. <script>
   jQuery("a.delete").click(function(){
