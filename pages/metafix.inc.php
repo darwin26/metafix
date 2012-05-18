@@ -13,7 +13,7 @@ ini_set('display_errors', 0);
 // GET PARAMS
 ////////////////////////////////////////////////////////////////////////////////
 $myself   = 'metafix';
-$myroot   = $this->getBasePath();
+$myroot   = $this->getBasePath();FB::log($myroot,__CLASS__.'::'.__FUNCTION__.' $myroot');
 $subpage  = rex_request('subpage', 'string');
 $func     = rex_request('func', 'string');
 $prefix   = rex_request('prefix', 'string');
@@ -129,4 +129,4 @@ notextile. <script>
 </script>
 ';
 
-echo rex_textile::parse($textile);
+echo rex_a79_textile($textile);

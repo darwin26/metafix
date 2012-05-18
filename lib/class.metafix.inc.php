@@ -26,9 +26,9 @@ class metafix
     global $REX;
 
     $this->types = array(
-      'art_' =>$REX['TABLE_PREFIX'].'article',
-      'cat_' =>$REX['TABLE_PREFIX'].'article',
-      'med_' =>$REX['TABLE_PREFIX'].'file'
+      'art_' =>rex::getTablePrefix().'article',
+      'cat_' =>rex::getTablePrefix().'article',
+      'med_' =>rex::getTablePrefix().'media'
       );
 
     $this->metainfo_ids    = self::get_metainfo_ids();
@@ -46,9 +46,8 @@ class metafix
    **/
   private function get_fields($source=null)
   {
-    global $REX;
     $metas = array();
-    $db = new rex_sql;
+    $db = rex_sql::factory();
 
     switch($source)
     {
@@ -65,7 +64,7 @@ class metafix
       case 'metainfo':
         foreach ($this->types as $prefix => $table)
         {
-          foreach($db->getDbArray('SELECT `field_id`,`name` FROM `'.$REX['TABLE_PREFIX'].'62_params` WHERE `name` LIKE \''.str_replace('_','\_',$prefix).'%\';') as $column)
+          foreach($db->getDbArray('SELECT `field_id`,`name` FROM `'.rex::getTablePrefix().'metainfo_params` WHERE `name` LIKE \''.str_replace('_','\_',$prefix).'%\';') as $column)
           {
             $metas[$prefix][] = $column['name'];
           }
@@ -96,8 +95,8 @@ class metafix
   {
     global $REX;
     $metas = array();
-    $db = new rex_sql;
-    foreach($db->getDBArray('SELECT `field_id`,`name` FROM `'.$REX['TABLE_PREFIX'].'62_params`;') as $column)
+    $db = rex_sql::factory();
+    foreach($db->getDBArray('SELECT `field_id`,`name` FROM `'.rex::getTablePrefix().'metainfo_params`;') as $column)
     {
       $metas[$column['name']] = $column['field_id'];
     }
@@ -147,7 +146,7 @@ class metafix
 
     if(in_array($name,$this->missing_fields[$prefix]))
     {
-      $db = new rex_sql;
+      $db = rex_sql::factory();
       if($db->setQuery('ALTER TABLE `'.$this->types[$prefix].'` ADD `'.$name.'` TEXT NOT NULL;'))
       {
         echo rex_info('Metainfo Field '.$name.' re-inserted.');
@@ -174,14 +173,14 @@ class metafix
     }
 
     global $REX;
-    $db = new rex_sql;
+    $db = rex_sql::factory();
 
     switch ($type)
     {
       case 'missing':
         if(in_array($name,$this->missing_fields[$prefix]))
         {
-          if($db->setQuery('DELETE FROM `'.$REX['TABLE_PREFIX'].'62_params` WHERE `field_id`='.$field_id.' AND `name`=\''.$name.'\';'))
+          if($db->setQuery('DELETE FROM `'.rex::getTablePrefix().'metainfo_params` WHERE `field_id`='.$field_id.' AND `name`=\''.$name.'\';'))
           {
             echo rex_info('Missing Field ['.$field_id.'] '.$name.' deleted.');
             return true;
@@ -222,9 +221,10 @@ class metafix
 
     if(in_array($name,$this->orphaned_fields[$prefix]))
     {
-      global $REX;
-      $db = new rex_sql;
-      $db->setQuery('INSERT INTO `'.$REX['TABLE_PREFIX'].'62_params` VALUES(\'\', \'\', \''.$name.'\', 1, \'\', 1, \'\', \'\', NULL, \'\', \'metafix\', \'\', \'metafix\', \'\');');
+
+      $db = rex_sql::factory();
+                                                                                 # field_id, title,          name, prior, attributes, type, default, params, validate, callback, restrictions, createuser, createdate,  updateuser, updatedate,
+      $db->setQuery('INSERT INTO `'.rex::getTablePrefix().'metainfo_params` VALUES(    \'\',  \'\', \''.$name.'\', 1,           \'\',    1,    \'\',   \'\',     NULL,     \'\',         \'\',\'metafix\',       \'\', \'metafix\',       \'\');');
       return $db->getLastId();
     }
 
@@ -232,3 +232,4 @@ class metafix
   }
 
 } // END class metafix
+

@@ -1,0 +1,10 @@
+version: '5.0 a1'
+author: jdlx
+supportpage: www.redaxo.org/de/forum/
+
+name: Metafix
+
+requires:
+  addons:
+    metainfo:
+      min-version: '5.0 a1'
