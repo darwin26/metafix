@@ -4,8 +4,8 @@
  *
  * @author http://rexdev.de
  *
- * @package redaxo4.3
- * @version 0.3.1
+ * @package redaxo 5
+ * @version 5.0.0
  */
 
 // GET PARAMS
