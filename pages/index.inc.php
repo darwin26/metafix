@@ -115,16 +115,18 @@ foreach ($MF->orphaned_fields as $prefix => $fields)
 
 $textile .= '
  </section><!-- /.rex-content.rex-content-block -->
+';
 
-notextile. <script>
-  jQuery("a.delete").click(function(){
-      if(confirm("sure?")){
+echo rex_textile::parse($textile);
+
+?>
+
+<script>
+  jQuery('a.delete').click(function(){
+      if(confirm('sure?')){
         return true;
       } else {
         return false;
       }
   });
 </script>
-';
-
-echo rex_textile::parse($textile);
