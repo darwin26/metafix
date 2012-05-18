@@ -23,12 +23,11 @@ class metafix
 
   function __construct()
   {
-    global $REX;
 
     $this->types = array(
-      'art_' =>rex::getTablePrefix().'article',
-      'cat_' =>rex::getTablePrefix().'article',
-      'med_' =>rex::getTablePrefix().'media'
+      'art_' => rex::getTable('article'),
+      'cat_' => rex::getTable('article'),
+      'med_' => rex::getTable('media'),
       );
 
     $this->metainfo_ids    = self::get_metainfo_ids();
@@ -64,7 +63,7 @@ class metafix
       case 'metainfo':
         foreach ($this->types as $prefix => $table)
         {
-          foreach($db->getDbArray('SELECT `field_id`,`name` FROM `'.rex::getTablePrefix().'metainfo_params` WHERE `name` LIKE \''.str_replace('_','\_',$prefix).'%\';') as $column)
+          foreach($db->getDbArray('SELECT `field_id`,`name` FROM `'.rex::getTable('metainfo_params').'` WHERE `name` LIKE \''.str_replace('_','\_',$prefix).'%\';') as $column)
           {
             $metas[$prefix][] = $column['name'];
           }
@@ -93,10 +92,9 @@ class metafix
    **/
   function get_metainfo_ids()
   {
-    global $REX;
     $metas = array();
     $db = rex_sql::factory();
-    foreach($db->getDBArray('SELECT `field_id`,`name` FROM `'.rex::getTablePrefix().'metainfo_params`;') as $column)
+    foreach($db->getDBArray('SELECT `field_id`,`name` FROM `'.rex::getTable('metainfo_params').'`;') as $column)
     {
       $metas[$column['name']] = $column['field_id'];
     }
@@ -172,7 +170,6 @@ class metafix
       return false;
     }
 
-    global $REX;
     $db = rex_sql::factory();
 
     switch ($type)
@@ -180,7 +177,7 @@ class metafix
       case 'missing':
         if(in_array($name,$this->missing_fields[$prefix]))
         {
-          if($db->setQuery('DELETE FROM `'.rex::getTablePrefix().'metainfo_params` WHERE `field_id`='.$field_id.' AND `name`=\''.$name.'\';'))
+          if($db->setQuery('DELETE FROM `'.rex::getTable('metainfo_params').'` WHERE `field_id`='.$field_id.' AND `name`=\''.$name.'\';'))
           {
             echo rex_info('Missing Field ['.$field_id.'] '.$name.' deleted.');
             return true;
@@ -207,7 +204,7 @@ class metafix
   }
 
   /**
-   * Inser field into Metainfo with generic params
+   * Insert field into Metainfo with generic params
    *
    * @param string [$prefix] (art_|cat_|med_)
    * @param string [$name] field name
@@ -223,8 +220,7 @@ class metafix
     {
 
       $db = rex_sql::factory();
-                                                                                 # field_id, title,          name, prior, attributes, type, default, params, validate, callback, restrictions, createuser, createdate,  updateuser, updatedate,
-      $db->setQuery('INSERT INTO `'.rex::getTablePrefix().'metainfo_params` VALUES(    \'\',  \'\', \''.$name.'\', 1,           \'\',    1,    \'\',   \'\',     NULL,     \'\',         \'\',\'metafix\',       \'\', \'metafix\',       \'\');');
+      $db->setQuery('INSERT INTO `'.rex::getTable('metainfo_params').'` VALUES(\'\', \'\', \''.$name.'\', 1, \'\', 1, \'\', \'\', NULL, \'\', \'\',\'metafix\', \'\', \'metafix\', \'\');');
       return $db->getLastId();
     }
 
