@@ -1,2 +1,2 @@
 !https://github.com/jdlx/metafix/wiki/metafix_logo.png!
-!https://github.com/jdlx/metafix/wiki/metafix_backend_screenshot.png!
+!https://github.com/jdlx/metafix/wiki/metafix_r5_backend_screenshot.png!
