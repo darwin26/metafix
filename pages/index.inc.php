@@ -8,8 +8,6 @@
  * @version 0.3.1
  */
 
-ini_set('display_errors', 0);
-
 // GET PARAMS
 ////////////////////////////////////////////////////////////////////////////////
 $myself   = 'metafix';
@@ -24,7 +22,7 @@ $type     = rex_request('type', 'string');
 
 // INIT
 ////////////////////////////////////////////////////////////////////////////////
-$MF = new metafix;                                                              #FB::log($MF,'$MF');
+$MF = new metafix;
 
 $prefix_to_subpage = array(
   'art_' => '',
