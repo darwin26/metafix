@@ -9,8 +9,7 @@
  */
 
 $myself = 'metafix';
-$myroot = $this->getBasePath(); #FB::log($myroot,__CLASS__.'::'.__FUNCTION__.' $myroot');
-#FB::log($this,__CLASS__.'::'.__FUNCTION__.' $this');
+$myroot = $this->getBasePath();
 
 $page = new rex_be_page('Metafix', array('page' => 'metainfo', 'subpage' => 'metafix'));
 $page->setHref('index.php?page=metainfo&subpage=metafix');
@@ -32,7 +31,7 @@ function metafix_init($params)
   {
     rex_extension::register('OUTPUT_FILTER','metafix_opf');
     function metafix_opf($params)
-    {                                                                           FB::log($params,__CLASS__.'::'.__FUNCTION__.' $params');
+    {
       $js = '
 <script>
   jQuery("#'.rex::getTablePrefix().'metainfo_params_Feld_bearbeiten_erstellen_name").val("'.rex_request('reasign', 'string').'");
