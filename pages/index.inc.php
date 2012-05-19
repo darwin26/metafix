@@ -82,7 +82,7 @@ foreach ($MF->missing_fields as $prefix => $fields)
                 '|'.$MF->types[$prefix].
                 '|*'.$name.'*
                  |"re-insert":index.php?page=metainfo&subpage=metafix&func=insert&prefix='.$prefix.'&name='.$name.
-                '|"(delete)delete":index.php?page=metainfo&subpage=metafix&func=delete&type=missing&prefix='.$prefix.'&name='.$name.'&field_id='.$MF->metainfo_ids[$name].
+                '|"(confirm)delete":index.php?page=metainfo&subpage=metafix&func=delete&type=missing&prefix='.$prefix.'&name='.$name.'&field_id='.$MF->metainfo_ids[$name].
                 '|'.PHP_EOL;
   }
 }
@@ -108,7 +108,7 @@ foreach ($MF->orphaned_fields as $prefix => $fields)
                 '|'.$MF->types[$prefix].
                 '|*'.$name.'*
                  |"re-assign":index.php?page=metainfo&subpage=metafix&func=reasign&prefix='.$prefix.'&name='.$name.
-                '|"(delete)delete":index.php?page=metainfo&subpage=metafix&func=delete&type=orphaned&prefix='.$prefix.'&name='.$name.
+                '|"(confirm)delete":index.php?page=metainfo&subpage=metafix&func=delete&type=orphaned&prefix='.$prefix.'&name='.$name.
                 '|'.PHP_EOL;
   }
 }
@@ -122,11 +122,7 @@ echo rex_textile::parse($textile);
 ?>
 
 <script>
-  jQuery('a.delete').click(function(){
-      if(confirm('sure?')){
-        return true;
-      } else {
-        return false;
-      }
-  });
+jQuery(function($){
+  $('.confirm').attr('data-confirm','sure?')
+});
 </script>
