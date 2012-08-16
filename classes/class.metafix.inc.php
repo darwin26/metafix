@@ -19,6 +19,22 @@ class metafix
   public $metainfo_fields;
   public $metainfo_ids;
   public $types;
+  public $missing_types;
+  public $default_types = array(
+    'text'                 => array('text',    0),
+    'textarea'             => array('text',    0),
+    'select'               => array('varchar', 255),
+    'radio'                => array('varchar', 255),
+    'checkbox'             => array('varchar', 255),
+    'date'                 => array('text',    0),
+    'time'                 => array('text',    0),
+    'datetime'             => array('text',    0),
+    'legend'               => array('text',    0),
+    'REX_MEDIA_BUTTON'     => array('varchar', 255),
+    'REX_MEDIALIST_BUTTON' => array('text',    0),
+    'REX_LINK_BUTTON'      => array('varchar', 255),
+    'REX_LINKLIST_BUTTON'  => array('text',    0),
+    );
 
 
   function __construct()
@@ -36,6 +52,7 @@ class metafix
     $this->metainfo_fields = self::get_fields('metainfo');
     $this->missing_fields  = self::get_mismatched('missing');
     $this->orphaned_fields = self::get_mismatched('orphaned');
+    $this->missing_types   = self::get_missing_types();
   }
 
   /**
@@ -48,7 +65,7 @@ class metafix
   {
     global $REX;
     $metas = array();
-    $db = new rex_sql;
+    $db = rex_sql::factory();
 
     switch($source)
     {
@@ -96,7 +113,7 @@ class metafix
   {
     global $REX;
     $metas = array();
-    $db = new rex_sql;
+    $db = rex_sql::factory();
     foreach($db->getDBArray('SELECT `field_id`,`name` FROM `'.$REX['TABLE_PREFIX'].'62_params`;') as $column)
     {
       $metas[$column['name']] = $column['field_id'];
@@ -147,7 +164,7 @@ class metafix
 
     if(in_array($name,$this->missing_fields[$prefix]))
     {
-      $db = new rex_sql;
+      $db = rex_sql::factory();
       if($db->setQuery('ALTER TABLE `'.$this->types[$prefix].'` ADD `'.$name.'` TEXT NOT NULL;'))
       {
         echo rex_info('Metainfo Field '.$name.' re-inserted.');
@@ -174,7 +191,7 @@ class metafix
     }
 
     global $REX;
-    $db = new rex_sql;
+    $db = rex_sql::factory();
 
     switch ($type)
     {
@@ -223,9 +240,51 @@ class metafix
     if(in_array($name,$this->orphaned_fields[$prefix]))
     {
       global $REX;
-      $db = new rex_sql;
+      $db = rex_sql::factory();
       $db->setQuery('INSERT INTO `'.$REX['TABLE_PREFIX'].'62_params` VALUES(\'\', \'\', \''.$name.'\', 1, \'\', 1, \'\', \'\', NULL, \'\', \'metafix\', \'\', \'metafix\', \'\');');
       return $db->getLastId();
+    }
+
+    return false;
+  }
+
+  /**
+   * Return all missing Metinfo Types
+   *
+   * @return array (label=>field_type,length...)
+   **/
+  function get_missing_types()
+  {
+    global $REX;
+    $stack = $this->default_types;
+
+    $db = rex_sql::factory();
+    foreach($db->getDBArray('SELECT `label` FROM `'.$REX['TABLE_PREFIX'].'62_type`;') as $column)
+    {
+      unset($stack[$column['label']]);
+    }
+    return $stack;
+  }
+
+  /**
+   * Re-Insert missing type
+   *
+   * @param  $label  string  rex_a62_types.label
+   * @return         mixed   (false|last insert id)
+   **/
+  function rebuild_type($label=null)
+  {
+    if(!$label) {
+      return false;
+    }
+
+    if(isset($this->missing_types[$label]))
+    {
+      global $REX;
+      $db = rex_sql::factory();
+      if($db->setQuery('INSERT INTO `'.$REX['TABLE_PREFIX'].'62_type` VALUES(\'\', \''.$label.'\', \''.$this->missing_types[$label][0].'\', '.$this->missing_types[$label][1].');')){
+        return $db->getLastId();
+      }
     }
 
     return false;

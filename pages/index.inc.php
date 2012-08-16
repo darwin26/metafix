@@ -72,6 +72,14 @@ if($func=='reasign')
   }
 }
 
+if($func=='rebuild_type')
+{
+  if($MF->rebuild_type($name)!==false)
+  {
+    $MF = new metafix;
+  }
+}
+
 
 // PAGE BODY
 ////////////////////////////////////////////////////////////////////////////////
@@ -123,6 +131,28 @@ foreach ($MF->orphaned_fields as $prefix => $fields)
                 '|"(delete)delete":index.php?page=metainfo&subpage=metafix&func=delete&type=orphaned&prefix='.$prefix.'&name='.$name.
                 '|'.PHP_EOL;
   }
+}
+
+$textile .= '
+ </div><!-- /.rex-addon-output -->
+
+ <div class="rex-addon-output">
+
+h2(rex-hl2). Missing Types %{color:gray;font-size:0.7em;}(missing in rex_a62_types)%
+
+table(rex-table).
+|_{width:30px;}. id|_{width:auto;}. label|_{width:50px;}. fix |_{width:50px;}. delete |
+';
+
+foreach ($MF->missing_types as $label => $def)
+{
+  $subpage = $prefix_to_subpage[$prefix];
+
+    $textile .= '| - '.
+                '|*'.$label.'*
+                 |"rebuild":index.php?page=metainfo&subpage=metafix&func=rebuild_type&name='.$label.
+                '|'.
+                '|'.PHP_EOL;
 }
 
 $textile .= '
