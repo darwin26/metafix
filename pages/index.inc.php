@@ -11,8 +11,8 @@
 
 // GET PARAMS
 ////////////////////////////////////////////////////////////////////////////////
-$myself   = 'metafix';
-$myroot   = $REX['INCLUDE_PATH'].'/addons/metainfo/plugins/'.$myself.'/';
+$mypage   = 'metafix';
+$myroot   = $REX['INCLUDE_PATH'].'/addons/metainfo/plugins/'.$mypage.'/';
 $subpage  = rex_request('subpage', 'string');
 $func     = rex_request('func', 'string');
 $prefix   = rex_request('prefix', 'string');
