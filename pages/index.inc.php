@@ -98,12 +98,12 @@ foreach ($MF->missing_fields as $prefix => $fields)
 
   foreach ($fields as $key => $name)
   {
-    $textile .= '|'.$MF->metainfo_ids[$name].
-                '|'.$MF->types[$prefix].
-                '|*'.$name.'*
-                 |"re-insert":index.php?page=metainfo&subpage=metafix&func=insert&prefix='.$prefix.'&name='.$name.
-                '|"(delete)delete":index.php?page=metainfo&subpage=metafix&func=delete&type=missing&prefix='.$prefix.'&name='.$name.'&field_id='.$MF->metainfo_ids[$name].
-                '|'.PHP_EOL;
+    $textile .= ' | '.$MF->metainfo_ids[$name].
+                ' | '.$MF->types[$prefix].
+                ' | *'.$name.'*
+                  | "re-insert":index.php?page=metainfo&subpage=metafix&func=insert&prefix='.$prefix.'&name='.$name.
+                ' | "(delete)delete":index.php?page=metainfo&subpage=metafix&func=delete&type=missing&prefix='.$prefix.'&name='.$name.'&field_id='.$MF->metainfo_ids[$name].
+                ' | '.PHP_EOL;
   }
 }
 
@@ -124,12 +124,12 @@ foreach ($MF->orphaned_fields as $prefix => $fields)
 
   foreach ($fields as $key => $name)
   {
-    $textile .= '| - '.
-                '|'.$MF->types[$prefix].
-                '|*'.$name.'*
-                 |"re-assign":index.php?page=metainfo&subpage=metafix&func=reasign&prefix='.$prefix.'&name='.$name.
-                '|"(delete)delete":index.php?page=metainfo&subpage=metafix&func=delete&type=orphaned&prefix='.$prefix.'&name='.$name.
-                '|'.PHP_EOL;
+    $textile .= ' |  - '.
+                ' | '.$MF->types[$prefix].
+                ' | *'.$name.'*
+                  | "re-assign":index.php?page=metainfo&subpage=metafix&func=reasign&prefix='.$prefix.'&name='.$name.
+                ' | "(delete)delete":index.php?page=metainfo&subpage=metafix&func=delete&type=orphaned&prefix='.$prefix.'&name='.$name.
+                ' | '.PHP_EOL;
   }
 }
 
@@ -148,11 +148,11 @@ foreach ($MF->missing_types as $label => $def)
 {
   $subpage = $prefix_to_subpage[$prefix];
 
-    $textile .= '| - '.
-                '|*'.$label.'*
-                 |"rebuild":index.php?page=metainfo&subpage=metafix&func=rebuild_type&name='.$label.
-                '|'.
-                '|'.PHP_EOL;
+    $textile .= ' |  - '.
+                ' | *'.$label.'*
+                  | "rebuild":index.php?page=metainfo&subpage=metafix&func=rebuild_type&name='.$label.
+                ' | '.
+                ' | '.PHP_EOL;
 }
 
 $textile .= '
