@@ -112,7 +112,7 @@ $textile .= '
 
  <div class="rex-addon-output">
 
-h2(rex-hl2). Orphaned Fields %{color:gray;font-size:0.7em;}(present in table, unknown to Metainfo)%
+h2(rex-hl2). Orphaned Fields %{color:gray;font-size:0.7em;}(found in table, unknown to Metainfo)%
 
 table(rex-table).
 |_{width:30px;}. id|_{width:100px;}. found in table|_{width:auto;}. name|_{width:50px;}. fix |_{width:50px;}. delete |
