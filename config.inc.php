@@ -3,16 +3,17 @@
  * Metafix - Metainfo Plugin
  *
  * @author http://rexdev.de
+ * @see https://github.com/jdlx/metafix
  *
  * @package redaxo 4.3.x/4.4.x
- * @version 0.3.2
+ * @version 0.3.3
  */
 
 $mypage = 'metafix';
 $myroot = $REX['INCLUDE_PATH'].'/addons/metainfo/plugins/'.$mypage;
 
 $REX['ADDON']['perm'][$mypage] = 'admin[]';
-$REX['ADDON']['version'][$mypage] = "0.3.2";
+$REX['ADDON']['version'][$mypage] = "0.3.3";
 $REX['ADDON']['author'][$mypage] = "jdlx / rexdev.de";
 $REX['ADDON']['supportpage'][$mypage] = 'redaxo.org/de/forum/search.php?keywords=metafix';
 
