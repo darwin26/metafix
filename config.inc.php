@@ -8,9 +8,13 @@
  * @version 0.3.2
  */
 
-$myself = 'metafix';
-$myroot = $REX['INCLUDE_PATH'].'/addons/metainfo/plugins/'.$myself;
+$mypage = 'metafix';
+$myroot = $REX['INCLUDE_PATH'].'/addons/metainfo/plugins/'.$mypage;
 
+$REX['ADDON']['perm'][$mypage] = 'admin[]';
+$REX['ADDON']['version'][$mypage] = "0.3.2";
+$REX['ADDON']['author'][$mypage] = "jdlx / rexdev.de";
+$REX['ADDON']['supportpage'][$mypage] = 'redaxo.org/de/forum/search.php?keywords=metafix';
 
 // MAIN
 ////////////////////////////////////////////////////////////////////////////////
