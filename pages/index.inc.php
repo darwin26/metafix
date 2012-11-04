@@ -41,7 +41,7 @@ $prefix_to_subpage = array(
 ////////////////////////////////////////////////////////////////////////////////
 require $REX['INCLUDE_PATH'] . '/layout/top.php';
 
-rex_title('Metafix',$REX['ADDON']['metainfo']['SUBPAGES']);
+rex_title('Metafix <span style="color:silver;font-size:0.5em;">'.$REX['ADDON']['plugins']['metainfo']['version'][$mypage].'</span>',$REX['ADDON']['metainfo']['SUBPAGES']);
 
 
 // ACTIONS
