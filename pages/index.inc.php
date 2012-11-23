@@ -12,14 +12,16 @@
 
 // GET PARAMS
 ////////////////////////////////////////////////////////////////////////////////
-$mypage   = 'metafix';
-$myroot   = $REX['INCLUDE_PATH'].'/addons/metainfo/plugins/'.$mypage.'/';
-$subpage  = rex_request('subpage', 'string');
-$func     = rex_request('func', 'string');
-$prefix   = rex_request('prefix', 'string');
-$name     = rex_request('name', 'string');
-$field_id = rex_request('field_id', 'int');
-$type     = rex_request('type', 'string');
+$mypage     = 'metafix';
+$myroot     = $REX['INCLUDE_PATH'].'/addons/metainfo/plugins/'.$mypage.'/';
+$subpage    = rex_request('subpage', 'string');
+$func       = rex_request('func', 'string');
+$prefix     = rex_request('prefix', 'string');
+$name       = rex_request('name', 'string');
+$field_id   = rex_request('field_id', 'int');
+$type       = rex_request('type', 'string');
+$table      = rex_request('table', 'string');
+$field_name = rex_request('field_name', 'string');
 
 
 // INCLUDES
@@ -29,7 +31,7 @@ require_once $myroot.'/classes/class.metafix.inc.php';
 
 // INIT
 ////////////////////////////////////////////////////////////////////////////////
-$MF = new metafix;
+$MF = new metafix;         FB::log($MF,' $MF');
 
 $prefix_to_subpage = array(
   'art_' => '',
@@ -75,6 +77,14 @@ if($func=='reasign')
 if($func=='rebuild_type')
 {
   if($MF->rebuild_type($name)!==false)
+  {
+    $MF = new metafix;
+  }
+}
+
+if($func=='rebuild_core_field')
+{
+  if($MF->rebuild_core_field($table,$field_name)!==false)
   {
     $MF = new metafix;
   }
@@ -138,7 +148,7 @@ $textile .= '
 
  <div class="rex-addon-output">
 
-h2(rex-hl2). Missing Types %{color:gray;font-size:0.7em;}(missing in rex_a62_types)%
+h2(rex-hl2). Metainfo Core: Missing Types %{color:gray;font-size:0.7em;}(types missing in rex_a62_types)%
 
 table(rex-table).
 |_{width:30px;}. id|_{width:auto;}. label|_{width:50px;}. fix |_{width:50px;}. delete |
@@ -153,6 +163,28 @@ foreach ($MF->missing_types as $label => $def)
                   | "rebuild":index.php?page=metainfo&subpage=metafix&func=rebuild_type&name='.$label.
                 ' | '.
                 ' | '.PHP_EOL;
+}
+
+$textile .= '
+ </div><!-- /.rex-addon-output -->
+
+ <div class="rex-addon-output">
+
+h2(rex-hl2). Metainfo Core: Missing Fields %{color:gray;font-size:0.7em}(fields missing in rex_62_params or rex_62_type)%
+
+table(rex-table).
+|_{width:30px;}. id|_{width:100px;}. missing in table|_{width:auto;}. name|_{width:50px;}. fix |_{width:50px;}. delete |
+';
+
+foreach ($MF->missing_metainfo_core_fields as $table => $fields) {
+  foreach($fields as $field_name => $def) {
+    $textile .= ' |  - '.
+                ' | '.$table.
+                ' | *'.$field_name.'*
+                  | "rebuild":index.php?page=metainfo&subpage=metafix&func=rebuild_core_field&table='.$table.'&field_name='.$field_name.
+                ' | '.
+                ' | '.PHP_EOL;
+  }
 }
 
 $textile .= '

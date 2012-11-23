@@ -37,6 +37,33 @@ class metafix
     'REX_LINKLIST_BUTTON'  => array('text',    0),
     );
 
+  public $missing_metainfo_core_fields;
+  public $metainfo_core_fields = array(
+    '62_params' => array(
+      'field_id'     => 'int(10) unsigned NOT NULL auto_increment',
+      'title'        => 'varchar(255) default NULL',
+      'name'         => 'varchar(255) default NULL',
+      'prior'        => 'int(10) unsigned NOT NULL',
+      'attributes'   => 'text NOT NULL',
+      'type'         => 'int(10) unsigned default NULL',
+      'default'      => 'varchar(255) NOT NULL',
+      'params'       => 'text default NULL',
+      'validate'     => 'text NULL',
+      'restrictions' => 'text NOT NULL',
+      'createuser'   => 'varchar(255) NOT NULL',
+      'createdate'   => 'int(11) NOT NULL',
+      'updateuser'   => 'varchar(255) NOT NULL',
+      'updatedate'   => 'int(11) NOT NULL',
+      ),
+    '62_type' => array(
+      'id'       => 'int(10) unsigned NOT NULL auto_increment',
+      'label'    => 'varchar(255) default NULL',
+      'dbtype'   => 'varchar(255) NOT NULL',
+      'dblength' => 'int(11) NOT NULL',
+      )
+  );
+
+
 
   function __construct()
   {
@@ -48,12 +75,13 @@ class metafix
       'med_' =>$REX['TABLE_PREFIX'].'file'
       );
 
-    $this->metainfo_ids    = self::get_metainfo_ids();
-    $this->table_fields    = self::get_fields('tables');
-    $this->metainfo_fields = self::get_fields('metainfo');
-    $this->missing_fields  = self::get_mismatched('missing');
-    $this->orphaned_fields = self::get_mismatched('orphaned');
-    $this->missing_types   = self::get_missing_types();
+    $this->metainfo_ids                 = self::get_metainfo_ids();
+    $this->table_fields                 = self::get_fields('tables');
+    $this->metainfo_fields              = self::get_fields('metainfo');
+    $this->missing_fields               = self::get_mismatched('missing');
+    $this->orphaned_fields              = self::get_mismatched('orphaned');
+    $this->missing_types                = self::get_missing_types();
+    $this->missing_metainfo_core_fields = self::get_missing_metainfo_core_fields();
   }
 
   /**
@@ -290,5 +318,53 @@ class metafix
 
     return false;
   }
+
+
+  /**
+   * Check for missing fields in metainfo core tables
+   *
+   * @return         array
+   **/
+  function get_missing_metainfo_core_fields()
+  {
+
+    global $REX;
+    $stack = $this->metainfo_core_fields;
+
+    foreach($stack as $table =>$def) {
+      $db = rex_sql::factory();
+      foreach($db->getDBArray('SHOW COLUMNS FROM `'.$REX['TABLE_PREFIX'].$table.'`;') as $column) {
+        unset($stack[$table][$column['Field']]);
+      }
+    }
+    return $stack;
+  }
+
+
+  /**
+   * Rebulid missing field in metainfo core tables
+   *
+   * @param  $table  string  metainfo core table
+   * @param  $field  string  metainfo core table.field
+   * @return         bool
+   **/
+  function rebuild_core_field($table=null,$field=null)
+  {
+    if(!$table || !$field) {
+      return false;
+    }
+
+    if(isset($this->missing_metainfo_core_fields[$table][$field]))
+    {
+      global $REX;
+      $field_def = $this->missing_metainfo_core_fields[$table][$field];
+      $qry = 'ALTER TABLE `'.$REX['TABLE_PREFIX'].$table.'` ADD `'.$field.'` '.$field_def.';';
+      $db = rex_sql::factory();
+      return $db->setQuery($qry);
+    }
+
+    return false;
+  }
+
 
 } // END class metafix
