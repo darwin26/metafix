@@ -31,9 +31,9 @@ require_once $myroot.'/classes/class.metafix.inc.php';
 
 // INIT
 ////////////////////////////////////////////////////////////////////////////////
-$MF = new metafix;         FB::log($MF,' $MF');
+$MF = new metafix;
 
-$prefix_to_subpage = array(
+$prefixix_to_subpage = array(
   'art_' => '',
   'cat_' => 'categories',
   'med_' => 'media',
