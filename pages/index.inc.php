@@ -33,7 +33,7 @@ require_once $myroot.'/classes/class.metafix.inc.php';
 ////////////////////////////////////////////////////////////////////////////////
 $MF = new metafix;
 
-$prefixix_to_subpage = array(
+$prefix_to_subpage = array(
   'art_' => '',
   'cat_' => 'categories',
   'med_' => 'media',
