@@ -13,7 +13,7 @@ $mypage = 'metafix';
 $myroot = $REX['INCLUDE_PATH'].'/addons/metainfo/plugins/'.$mypage;
 
 $REX['ADDON']['perm'][$mypage] = 'admin[]';
-$REX['ADDON']['version'][$mypage] = "0.3.5";
+$REX['ADDON']['version'][$mypage] = "1.0.0";
 $REX['ADDON']['author'][$mypage] = "jdlx / rexdev.de";
 $REX['ADDON']['supportpage'][$mypage] = 'redaxo.org/de/forum/search.php?keywords=metafix';
 
