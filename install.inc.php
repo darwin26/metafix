@@ -6,7 +6,7 @@
  * @see https://github.com/jdlx/metafix
  *
  * @package redaxo 4.3.x/4.4.x
- * @version 0.3.4
+ * @version 1.0.0
  */
 
 $myself = 'metafix';
